@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 
 import android.app.Activity;
 import android.os.Build;
@@ -23,13 +24,17 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
-	private EditText editText;
+	private EditText usernameText;
+	private EditText passwordText;
+	private EditText fileText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		editText = (EditText) findViewById(R.id.file_name);
+		usernameText = (EditText) findViewById(R.id.username);
+		passwordText = (EditText) findViewById(R.id.password);
+		fileText = (EditText) findViewById(R.id.file_name);
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().build());
 		}
@@ -38,8 +43,9 @@ public class MainActivity extends Activity {
 	public void upload(View view) {
 		try {
 			PostMethod post = new PostMethod("http://10.1.79.23:8080/News/UploadServlet");
-			Part[] parts = new Part[] { new FilePart(editText.getText().toString(), new File(Environment.getExternalStorageDirectory(), editText
-					.getText().toString())) };
+			Part[] parts = new Part[] { new StringPart("username", usernameText.getText().toString()),
+					new StringPart("password", passwordText.getText().toString()),
+					new FilePart(fileText.getText().toString(), new File(Environment.getExternalStorageDirectory(), fileText.getText().toString())) };
 			post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
 			if (new HttpClient().executeMethod(post) == HttpStatus.SC_OK) {
 				Toast.makeText(getApplicationContext(), R.string.upload_success, Toast.LENGTH_LONG).show();

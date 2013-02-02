@@ -9,5 +9,7 @@
     <string name="error">error</string>
     <string name="upload_success">upload success</string>
     <string name="upload_fail">upload fail</string>
+    <string name="enter_username">Enter your username</string>
+    <string name="enter_password">Enter your password</string>
 
 </resources>
